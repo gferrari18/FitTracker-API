@@ -10,31 +10,31 @@ CORS(app)
 def index():
     return "Hello World!!!"
 
-@app.route('/resetdb')
-def reset():
-    connstr = os.environ.get('datacon')
-    conn = pymysql.connect(connstr)
-    crsr = conn.cursor()
+# @app.route('/resetdb')
+# def reset():
+#     connstr = os.environ.get('datacon')
+#     conn = pymysql.connect(connstr)
+#     crsr = conn.cursor()
 
-    # Drop the tables if they already exist
+#     # # Drop the tables if they already exist
 
-    sql = 'DROP TABLE IF EXISTS `tracker`.`login`;'
-    crsr.execute(sql)
-    sql = 'DROP TABLE IF EXISTS `tracker`.`user`;'
-    crsr.execute(sql)
-    sql = 'CREATE TABLE `tracker`.`user` (`id` INT NOT NULL AUTO_INCREMENT,`login` VARCHAR(255) NULL, PRIMARY KEY (`id`));'
-    crsr.execute(sql)
-    sql = 'CREATE TABLE `tracker`.`login` (`id` INT NOT NULL AUTO_INCREMENT,`userid` INT NULL,`date` DATETIME, PRIMARY KEY (`id`), FOREIGN KEY (userid) REFERENCES `user`(id));'
-    crsr.execute(sql)
+#     # sql = 'DROP TABLE IF EXISTS `tracker`.`login`;'
+#     # crsr.execute(sql)
+#     # sql = 'DROP TABLE IF EXISTS `tracker`.`user`;'
+#     # crsr.execute(sql)
+#     # sql = 'CREATE TABLE `tracker`.`user` (`id` INT NOT NULL AUTO_INCREMENT,`login` VARCHAR(255) NULL, PRIMARY KEY (`id`));'
+#     # crsr.execute(sql)
+#     # sql = 'CREATE TABLE `tracker`.`login` (`id` INT NOT NULL AUTO_INCREMENT,`userid` INT NULL,`date` DATETIME, PRIMARY KEY (`id`), FOREIGN KEY (userid) REFERENCES `user`(id));'
+#     # crsr.execute(sql)
 
-    return 'Reset Successful'
+#     # return 'Reset Successful'
 
 @app.route('/login/<user>/<email>/<password>')
 def login(user,email,password):
 
     # <user> allow us to put values in the web request, in this case, the user's login
-    conn = pymysql.connect(host='localhost',
-        user="root", password="",
+    conn = pymysql.connect(host='tracker.c9cldtqev59j.us-west-1.rds.amazonaws.com',
+        user="admin", password="XJ5hWCVaWKUjs8tcXRKn",
         port=3306, database="tracker")
     crsr = conn.cursor()
 
