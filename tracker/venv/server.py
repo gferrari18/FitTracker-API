@@ -32,19 +32,24 @@ def index():
 @app.route('/login/<user>/<email>/<password>')
 def login(user,email,password):
 
-    # <user> allow us to put values in the web request, in this case, the user's login
-    conn = pymysql.connect(host='tracker.c9cldtqev59j.us-west-1.rds.amazonaws.com',
-        user="admin", password="XJ5hWCVaWKUjs8tcXRKn",
-        port=3306, database="Tracker")
+    conn = pymysql.connect(host="127.0.0.1",
+        user="root", password="76495312",
+        port=3306, database="nice")
     crsr = conn.cursor()
 
     # First, check if this user already exists
-    # sql = 'select id from user where login=%s'
-    # crsr.execute(sql, (user))
-    # print('returned ' + str(crsr.rowcount) + ' rows')
-    # if crsr.rowcount == 0:
-    #     print('adding ' + user)
-    #     crsr.execute('insert into user (login) values (%s)', user)
+    sql = 'select username from loginfo where username=%s'
+    crsr.execute(sql, (user))
+    print('returned ' + str(crsr.rowcount) + ' rows')
+    if crsr.rowcount == 0:
+        print('adding ' + user)
+        sql = 'insert into loginfo (`username`, `email`, `password`) values (%s,%s,%s)'
+        params = [user,email,password]
+        crsr.execute(sql, params)
+        conn.commit()
+        return jsonify({'message': "Thank you for registering"})
+    else:
+        return jsonify({'message': "Sorry, username or email already used"})
     #     print('adding ' + str(crsr.rowcount) + ' user')
     #     conn.commit()
     #     print('re-executing ' + sql)
@@ -54,9 +59,9 @@ def login(user,email,password):
     # userid = res[0]
     # # Now, add the login information
     # Note, CURRENT_TIMESTAMP is built into MySQL to get the current time
-    sql = 'insert into loginfo (`username`, `email`, `password`) values (%s,%s,%s)'
-    params = [user,email,password]
-    crsr.execute(sql, params)
+    # sql = 'insert into loginfo (`username`, `email`, `password`) values (%s,%s,%s)'
+    # params = [user,email,password]
+    # crsr.execute(sql, params)
 
     conn.commit()
 
